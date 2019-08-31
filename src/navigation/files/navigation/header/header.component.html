@@ -1,0 +1,45 @@
+<div class="menu" fxHide.gt-xs>
+  <button mat-icon-button (click)="ToggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</div>
+
+<mat-nav-list fxLayout>
+  <mat-list-item (click)="navigateTo('/')" fxShow class="m-top" style="margin-left: 10px;">
+    <a matLine routerLink="/">
+      INICIO
+    </a>
+  </mat-list-item>
+</mat-nav-list>
+
+
+
+<mat-nav-list fxHide.xs fxLayout>
+  <!-- CONFIGURAR ROTAS -->
+</mat-nav-list>
+
+<% if (auth) { %>
+<div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+  <mat-nav-list fxLayout>
+
+    <mat-list-item (click)="navigateTo('/login')" class="m-top" *ngIf="!currentUser">
+      <a matLine routerLink="/login">ENTRAR</a>
+    </mat-list-item>
+
+    <mat-list-item (click)="navigateTo('/signup')" class="m-top" *ngIf="!currentUser">
+      <a matLine routerLink="/signup">CADASTRAR</a>
+    </mat-list-item>
+
+    <mat-list-item class="m-top" [matMenuTriggerFor]="menu" *ngIf="currentUser">
+      <b>Olá</b>
+      <mat-icon>arrow_drop_down</mat-icon>
+      <mat-menu xPosition="before" #menu="matMenu">
+        <button (click)="logout()" mat-menu-item>
+          SAIR
+          <mat-icon fxFlex fxLayoutAlign="end" class="menu-perfil">power_settings_new</mat-icon>
+        </button>
+      </mat-menu>
+    </mat-list-item>
+  </mat-nav-list>
+</div>
+<% } %>

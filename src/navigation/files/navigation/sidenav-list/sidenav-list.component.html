@@ -1,0 +1,71 @@
+<mat-nav-list>
+    <mat-list-item style="margin-top: 20px;" [matMenuTriggerFor]="menu" *ngIf="currentUser">
+        <div fxFlex fxLayout="column">
+            <div fxFlex fxLayout="row">
+                <b>Olá</b>,
+            </div>
+            <div style="padding-left: 15px;margin: -15px;" fxFlex fxLayout="column">
+                <p>{{ currentUser?.nome }}</p>
+            </div>
+        </div>
+        <mat-icon>arrow_drop_down</mat-icon>
+        <mat-menu xPosition="before" #menu="matMenu">
+            <button (click)="CloseSidenav()" routerLink="/perfil" mat-menu-item>
+                PERFIL
+                <mat-icon fxFlex fxLayoutAlign="end" class="menu-perfil">business</mat-icon>
+            </button>
+            <button (click)="CloseSidenav()" routerLink="/info/materiais" mat-menu-item>
+                MATERIAIS
+                <mat-icon fxFlex fxLayoutAlign="end" class="menu-perfil">dashboard</mat-icon>
+            </button>
+            <button (click)="logout()" mat-menu-item>
+                SAIR
+                <mat-icon fxFlex fxLayoutAlign="end" class="menu-perfil">power_settings_new</mat-icon>
+            </button>
+
+        </mat-menu>
+    </mat-list-item>
+    <br><br>
+    <mat-list-item>
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/">
+            INICIO
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="currentUser && hasClaim('coletor')">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/coletor/empresas">
+            EMPRESAS
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="currentUser && hasClaim('empresa')">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/empresa/coletores">
+            COLETORES
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="currentUser && hasClaim('empresa')">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/empresa/solicitacoes">
+            SOLICITAÇÕES
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="currentUser && hasClaim('coletor')">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/coletor/solicitacoes">
+            SOLICITAÇÕES
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="!currentUser">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/login">
+            ENTRAR
+        </a>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="!currentUser">
+        <a (click)="CloseSidenav()" mat-list-item routerLink="/signup">
+            CADASTRAR
+        </a>
+    </mat-list-item>
+
+</mat-nav-list>
