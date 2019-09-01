@@ -1,9 +1,10 @@
-import { Rule, Tree, SchematicContext, SchematicsException, url, template, move, mergeWith, apply } from "@angular-devkit/schematics";
+import { Rule, Tree, SchematicContext, SchematicsException, url, template, move, mergeWith, apply, branchAndMerge, chain } from "@angular-devkit/schematics";
 import { buildDefaultPath } from "@schematics/angular/utility/project";
 import { parseName } from "@schematics/angular/utility/parse-name";
 import { strings } from "@angular-devkit/core";
 import { Schema } from "./schema";
-
+import { addDeclarationToAppModule } from "../utility/add-declaration-to-module.rule";
+import { metadataFields } from "./metadataFields";
 export function navigation(_options: Schema) : Rule {
 
     return (tree: Tree, _context: SchematicContext) => {
@@ -34,7 +35,14 @@ export function navigation(_options: Schema) : Rule {
             move(path)
         ]);
 
-        return mergeWith(sourceParametrizedTemplates)(tree, _context);
+        const appModule = '/src/app/app.module.ts';
+        const metadataField = metadataFields.declarations;
+
+        return chain([
+            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'HeaderComponent', './navigation/header/header.component', 'HeaderComponent')),
+            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'SidenavListComponent', './navigation/sidenav-list/sidenav-list.component', 'SidenavListComponent')),
+            mergeWith(sourceParametrizedTemplates)
+        ])(tree, _context);
     }
 
 }

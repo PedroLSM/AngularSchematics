@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+<% if (auth) { %>import { AuthService } from 'src/app/services/auth.service';<% } %>
 
 @Component({
   selector: 'app-sidenav-list',
@@ -8,19 +8,21 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SidenavListComponent implements OnInit {
   @Output() closeSidenav: EventEmitter<void> = new EventEmitter<void>();
+  <% if (auth) { %>
   currentUser: any;
 
   constructor(private authService: AuthService) {
     this.authService.currentUser.subscribe(x => (this.currentUser = x));
   }
-
-  ngOnInit() {
-  }
+  <% } else { %>
+  constructor() { }
+  <% } %>
+  ngOnInit() { }
 
   CloseSidenav() {
     this.closeSidenav.emit();
   }
-
+  <% if (auth) { %>
   logout() {
     this.closeSidenav.emit();
 
@@ -31,4 +33,5 @@ export class SidenavListComponent implements OnInit {
   hasClaim(role: string) {
     return this.authService.getClaimRole() === role;
   }
+  <% } %>
 }

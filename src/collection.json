@@ -15,6 +15,10 @@
       "factory": "./ng-add/index",
       "description": "Add a simple custom schematic.",
       "schema": "./hello/schema.json"
+    },
+    "custom-packages": {
+      "description": "A blank schematic.",
+      "factory": "./custom-packages/index#customPackages"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, Tree, url, apply, template, mergeWith, SchematicsException, move } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, Tree, url, apply, template, mergeWith, SchematicsException, move  } from '@angular-devkit/schematics';
 
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { buildDefaultPath } from '@schematics/angular/utility/project';
@@ -6,6 +6,7 @@ import { buildDefaultPath } from '@schematics/angular/utility/project';
 import { Schema } from './schema';
 
 import { strings } from '@angular-devkit/core';
+import { WorkspaceSchema } from '@angular-devkit/core/src/experimental/workspace';
 
 function addExclamation(value: string): string {
   return value + '!';
@@ -20,9 +21,9 @@ export function hello(_options: Schema): Rule {
       throw new SchematicsException('Not an Angular CLI workspace');
     }
 
-    const workspaceConfig = JSON.parse(workspaceConfigBuffer.toString());
-    const projectName = _options.project || workspaceConfig.defaultProject;
-    const project = workspaceConfig.projects[projectName];
+    const workspaceConfig: WorkspaceSchema = JSON.parse(workspaceConfigBuffer.toString());
+    const projectName = _options.project || workspaceConfig.defaultProject || 'hello';
+    const project: any  = workspaceConfig.projects[projectName];
 
     const defaultProjectPath = buildDefaultPath(project);
 
