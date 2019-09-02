@@ -2,25 +2,28 @@ import { Rule, SchematicContext, Tree, chain } from '@angular-devkit/schematics'
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { NodeDependency, NodeDependencyType, addPackageJsonDependency } from '@schematics/angular/utility/dependencies';
-import { Observable, of } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 
 import { NpmRegistryPackage, getLatestNodeVersion } from './../utility/npmjs';
+import { Schema } from './schema.d';
+import { SchemaPackages } from './schema-packages';
 
-// You don't have to export the function as default. You can also have more than one rule factory
-// per file.
-export function customPackages(_options: any): Rule {
+export function customPackages(_options: Schema): Rule {
   return (tree: Tree, _context: SchematicContext) => {
+
+    const packages: string[] = packagesToInstall(_options);
+
     return chain([
-      addPackageJsonDependencies(),
+      addPackageJsonDependencies(packages),
       installDependencies()
     ])(tree, _context);
   };
 }
 
-function addPackageJsonDependencies(): Rule {
+function addPackageJsonDependencies(packages: string[]): Rule {
   return (tree: Tree, _context: SchematicContext): Observable<Tree> => {
-    return of('@ng-bootstrap/ng-bootstrap').pipe(
+    return from(packages).pipe(
       concatMap(name => getLatestNodeVersion(name)),
       map((npmRegistryPackage: NpmRegistryPackage) => {
         const nodeDependency: NodeDependency = {
@@ -31,7 +34,7 @@ function addPackageJsonDependencies(): Rule {
         };
 
         addPackageJsonDependency(tree, nodeDependency);
-        _context.logger.info('✅️ Added dependency');
+        _context.logger.info(`✅️  Added dependency, name: ${npmRegistryPackage.name}`);
 
         return tree;
       })
@@ -48,9 +51,12 @@ function installDependencies(): Rule {
   }
 }
 
-// function setupProject(options: string): Rule {
-//   console.log(options);
-//   return (tree: Tree, _context: SchematicContext) => {
-//     return tree;
-//   }
-// }
+function packagesToInstall(options: any): string[] {
+  let packages: string[] = [];
+  const schema: any = new SchemaPackages(); 
+  for (const key in options) {
+    if (options[key]) { packages = [...packages, ...schema[key]]; }
+  }
+  
+  return packages;
+}

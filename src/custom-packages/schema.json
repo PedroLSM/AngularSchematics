@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "CustomPackagesSchematics",
+    "title": "Add Packages Options Schema",
+    "type": "object",
+    "description": "Adicionar pacotes default ao iniciar a criaçãp dos projetos",
+    "properties": {
+        "ngBootstrap": {
+            "type": "boolean",
+            "default": true,
+            "x-prompt": "@ng-bootstrap/ng-bootstrap?"
+        },
+        "angularMaterial": {
+            "type": "boolean",
+            "default": true,
+            "x-prompt": "@angular/material?"
+        },
+        "bootstrap": {
+            "type": "boolean",
+            "default": true,
+            "x-prompt": "bootstrap?"
+        },
+        "project": {
+            "type": "string",
+            "description": "Generate in specific Angular CLI workspace project"
+        }
+    },
+    "required": [
+        "ngBootstrap",
+        "angularMaterial",
+        "bootstrap"
+    ]
+}

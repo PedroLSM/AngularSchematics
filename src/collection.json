@@ -18,7 +18,8 @@
     },
     "custom-packages": {
       "description": "A blank schematic.",
-      "factory": "./custom-packages/index#customPackages"
+      "factory": "./custom-packages/index#customPackages",
+      "schema": "./custom-packages/schema.json"
     }
   }
 }
