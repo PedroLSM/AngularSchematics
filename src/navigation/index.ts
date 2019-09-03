@@ -39,8 +39,8 @@ export function navigation(_options: Schema) : Rule {
         const metadataField = metadataFields.declarations;
 
         return chain([
-            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'HeaderComponent', './navigation/header/header.component', 'HeaderComponent')),
-            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'SidenavListComponent', './navigation/sidenav-list/sidenav-list.component', 'SidenavListComponent')),
+            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'HeaderComponent', './navigation/header/header.component', '')),
+            branchAndMerge(addDeclarationToAppModule(appModule, metadataField, 'SidenavListComponent', './navigation/sidenav-list/sidenav-list.component', '')),
             mergeWith(sourceParametrizedTemplates)
         ])(tree, _context);
     }

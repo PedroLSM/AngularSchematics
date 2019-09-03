@@ -341,29 +341,37 @@ export function addSymbolToNgModuleMetadata(
     const expr = node as ts.ObjectLiteralExpression;
     if (expr.properties.length == 0) {
       position = expr.getEnd() - 1;
-      toInsert = `  ${metadataField}: [${importText}]\n`;
+      toInsert = (importText === 'EMPTY') ? 
+        `  ${metadataField}: []\n` : 
+        `  ${metadataField}: [${importText}]\n`;
     } else {
       node = expr.properties[expr.properties.length - 1];
       position = node.getEnd();
       // Get the indentation of the last element, if any.
       const text = node.getFullText(source);
       if (text.match('^\r?\r?\n')) {
-        toInsert = `,${text.match(/^\r?\n\s+/)[0]}${metadataField}: [${importText}]`;
+        toInsert = (importText === 'EMPTY') ? 
+          `,${text.match(/^\r?\n\s+/)[0]}${metadataField}: []` : 
+          `,${text.match(/^\r?\n\s+/)[0]}${metadataField}: [${importText}]`;
       } else {
-        toInsert = `, ${metadataField}: [${importText}]`;
+        toInsert = (importText === 'EMPTY') ? 
+          `, ${metadataField}: []` : 
+          `, ${metadataField}: [${importText}]`;
       }
     }
   } else if (node.kind == ts.SyntaxKind.ArrayLiteralExpression) {
     // We found the field but it's empty. Insert it just before the `]`.
     position--;
-    toInsert = `${importText}`;
+    toInsert = (importText === 'EMPTY') ? `` : `${importText}`;
   } else {
     // Get the indentation of the last element, if any.
     const text = node.getFullText(source);
     if (text.match(/^\r?\n/)) {
-      toInsert = `,${text.match(/^\r?\n(\r?)\s+/)[0]}${importText}`;
+      toInsert = (importText === 'EMPTY') ? 
+        `` : 
+        `,${text.match(/^\r?\n(\r?)\s+/)[0]}${importText}`;
     } else {
-      toInsert = `, ${importText}`;
+      toInsert = (importText === 'EMPTY') ? `` : `, ${importText}`;
     }
   }
   if (importPath !== null) {
